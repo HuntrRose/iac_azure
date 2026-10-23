@@ -1,4 +1,5 @@
 [tools]
+uv = "latest"
 azure = "latest"
 terraform = "latest"
 kubectl = "latest"
