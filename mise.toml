@@ -1,0 +1,4 @@
+[tools]
+azure = "latest"
+terraform = "latest"
+kubectl = "latest"
