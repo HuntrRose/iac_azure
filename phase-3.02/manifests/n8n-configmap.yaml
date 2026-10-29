@@ -1,0 +1,13 @@
+# https://kubernetes.io/docs/concepts/configuration/configmap/
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: n8n-config
+  namespace: n8n
+data:
+  N8N_PORT: "3008"
+  N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+  N8N_EXECUTE_COMMAND_ENABLED: "true"
+  N8N_SECURE_COOKIE: "false"
+  NODES_EXCLUDE: "[]"
+---

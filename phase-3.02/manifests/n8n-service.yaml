@@ -1,0 +1,17 @@
+# https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: n8n
+  namespace: n8n
+spec:
+  selector:
+    app: n8n
+  type: LoadBalancer
+  ports:
+    - name: n8n
+      protocol: TCP
+      port: 3008
+      targetPort: 3008
+      nodePort: 30001
+---

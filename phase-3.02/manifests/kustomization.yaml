@@ -1,0 +1,18 @@
+# https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  namespace: n8n # this will set the namespace for all KRM objects mentioned in this kustomize file
+resources:
+  - n8n-namespace.yaml
+  - n8n-deployment.yaml
+  - n8n-pvc.yaml
+  - n8n-configmap.yaml
+  - n8n-service.yaml
+# generators:
+# - ...
+# transformers:
+# - ...
+# validators:
+# - ...
+
