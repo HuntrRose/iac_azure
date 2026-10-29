@@ -3,5 +3,8 @@
     "context": "..",
     "dockerfile": "Dockerfile"
   },
-  "postCreateCommand": "scripts/setup"
+  "postCreateCommand": "scripts/setup",
+  "forwardPorts": [
+    3008
+  ]
 }
