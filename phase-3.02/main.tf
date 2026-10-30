@@ -54,3 +54,60 @@ resource "azurerm_kubernetes_cluster" "main" {
 }
 
 
+resource "azurerm_postgresql_flexible_server" "n8n" {
+  name                = "psql-n8n-easfgasasg"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+
+  administrator_login    = "psqladmin"
+  administrator_password = "n8n_passwd"
+
+  sku_name   = "B_Standard_B1ms"
+  storage_mb = 32768
+  version    = "16"
+  zone       = "2"
+
+  backup_retention_days        = 7
+  geo_redundant_backup_enabled = false
+
+  public_network_access_enabled = true
+}
+
+resource "azurerm_postgresql_flexible_server_configuration" "disable_ssl" {
+  name = "require_secure_transport"
+  server_id = azurerm_postgresql_flexible_server.n8n.id
+  value = "OFF"
+}
+
+resource "azurerm_postgresql_flexible_server_database" "n8n" {
+  name = "n8n"
+  server_id = azurerm_postgresql_flexible_server.n8n.id
+}
+
+resource "azurerm_postgresql_flexible_server_firewall_rule" "n8n" {
+  name             = "allow-azure-services"
+  server_id        = azurerm_postgresql_flexible_server.n8n.id
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
+}
+
+output "pg_addr" {
+   value = azurerm_postgresql_flexible_server.n8n.fqdn
+   description = "DB FQDN"
+}
+
+output "pg_db" {
+   value = azurerm_postgresql_flexible_server_database.n8n.name
+   description = "DB_name"
+}
+
+output "db_user" {
+   value = azurerm_postgresql_flexible_server.n8n.administrator_login
+   description = "Admin user"
+}
+
+output "db_pass" {
+   value = azurerm_postgresql_flexible_server.n8n.administrator_password
+   description = "Admin Passwd"
+   sensitive = true
+}
