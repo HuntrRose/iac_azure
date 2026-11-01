@@ -1,0 +1,26 @@
+# https://kubernetes.io/docs/concepts/services-networking/ingress/
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: n8n-ingress
+  namespace: n8n
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - my.n8n.huntrrose.com
+      secretName: n8n-my-cert
+  rules:
+    - host: my.n8n.huntrrose.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: n8n
+                port:
+                  number: 3008
+---
