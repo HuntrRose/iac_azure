@@ -69,12 +69,42 @@ resource "azurerm_kubernetes_flux_configuration" "main" {
   namespace = "flux-system"
   
   git_repository {
-    
+    url = "ssh://git@github.com:HuntrRose/n8n.git"
+    reference_type = "branch"
+    reference_value = "main"
+
+    ssh_private_key_base64 = base64encode(file("~/.ssh/n8n"))
   }
+  
+  kustomizations {
+    name = "infra-controllers"
+    path = "./infrastructure/controllers/staging"
+    sync_interval_in_seconds = 300
+    garbage_collection_enabled = true
+  }
+
+  kustomizations {
+    name = "infra-configs" 
+    path = "./infrastructure/configs/staging"
+    sync_interval_in_seconds = 300
+    garbage_collection_enabled = true
+    depends_on = ["infra-controllers"]
+  }
+ 
+  kustomizations {
+    name = "apps"
+    path = "./apps/staging"
+    sync_interval_in_seconds = 300
+    garbage_collection_enabled = true
+    depends_on = ["infra-configs"]
+  }
+
+  scope = "cluster"
+
+  depends_on = [ azurerm_kubernetes_cluster_extension.flux ]
 }
 
-data "azurerm_client_config" "current" {
-}
+data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "n8n_vault" {
   name = "kv-n8n-asrghhasdf"
@@ -102,36 +132,27 @@ resource "azurerm_role_assignment" "aks_keyvault_secrets_provider" {
   principal_id = azurerm_kubernetes_cluster.main.key_vault_secrets_provider[0].secret_identity[0].object_id
 }
 
-resource "azurerm_key_vault_secret" "db_host" {
-  name = "db-host"
-  value = azurerm_postgresql_flexible_server.n8n.fqdn
+resource "random_password" "customer1_db_password" {
+   length = 24
+   special = false
+    
+   lifecycle{
+     ignore_changes = all
+   }
+}
+
+resource "azurerm_key_vault_secret" "customer1_db_user" {
+  name = "customer1_db-user"
+  value = "app"
   key_vault_id = azurerm_key_vault.n8n_vault.id
   
   depends_on = [azurerm_role_assignment.kv_admin]
 }
 
-resource "azurerm_key_vault_secret" "db_name" {
-  name = "db-name"
-  value = azurerm_postgresql_flexible_server_database.n8n.name
+resource "azurerm_key_vault_secret" "customer1db_pass" {
+  name = "customer1db-pass"
+  value = random_password.customer1_db_password.result
   key_vault_id = azurerm_key_vault.n8n_vault.id
   
   depends_on = [azurerm_role_assignment.kv_admin]
 }
-
-resource "azurerm_key_vault_secret" "db_user" {
-  name = "db-user"
-  value = azurerm_postgresql_flexible_server.n8n.administrator_login
-  key_vault_id = azurerm_key_vault.n8n_vault.id
-  
-  depends_on = [azurerm_role_assignment.kv_admin]
-}
-
-resource "azurerm_key_vault_secret" "db_pass" {
-  name = "db-pass"
-  value = azurerm_postgresql_flexible_server.n8n.administrator_password
-  key_vault_id = azurerm_key_vault.n8n_vault.id
-  
-  depends_on = [azurerm_role_assignment.kv_admin]
-}
-
-
