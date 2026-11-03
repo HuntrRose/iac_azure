@@ -1,0 +1,3 @@
+[submodule "phase-5/n8n"]
+	path = phase-5/n8n
+	url = git@github.com:HuntrRose/n8n.git
