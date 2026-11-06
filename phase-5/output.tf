@@ -7,25 +7,25 @@ output "tenant_id" {
   value = data.azurerm_client_config.current.tenant_id
 }
 
-output "pg_addr" {
-   value = azurerm_postgresql_flexible_server.n8n.fqdn
-   description = "DB FQDN"
-}
-
-output "pg_db" {
-   value = azurerm_postgresql_flexible_server_database.n8n.name
-   description = "DB_name"
-}
-
-output "db_user" {
-   value = azurerm_postgresql_flexible_server.n8n.administrator_login
-   description = "Admin user"
-}
-
-output "db_pass" {
-   value = azurerm_postgresql_flexible_server.n8n.administrator_password
-   description = "Admin Passwd"
-   sensitive = true
-}
-
+#output "pg_addr" {
+#   value = azurerm_postgresql_flexible_server.n8n.fqdn
+#   description = "DB FQDN"
+#}
+#
+#output "pg_db" {
+#   value = azurerm_postgresql_flexible_server_database.n8n.name
+#   description = "DB_name"
+#}
+#
+#output "db_user" {
+#   value = azurerm_postgresql_flexible_server.n8n.administrator_login
+#   description = "Admin user"
+#}
+#
+#output "db_pass" {
+#   value = azurerm_postgresql_flexible_server.n8n.administrator_password
+#   description = "Admin Passwd"
+#   sensitive = true
+#}
+#
 

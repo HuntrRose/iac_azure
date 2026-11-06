@@ -5,6 +5,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 5.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
   }
 }
 
@@ -69,11 +73,11 @@ resource "azurerm_kubernetes_flux_configuration" "main" {
   namespace = "flux-system"
   
   git_repository {
-    url = "ssh://git@github.com:HuntrRose/n8n.git"
+    url = "ssh://git@github.com/HuntrRose/n8n.git"
     reference_type = "branch"
     reference_value = "main"
 
-    ssh_private_key_base64 = base64encode(file("~/.ssh/n8n"))
+    ssh_private_key_base64 = base64encode(file("~/.ssh/n8n-ssl"))
   }
   
   kustomizations {
@@ -142,7 +146,7 @@ resource "random_password" "customer1_db_password" {
 }
 
 resource "azurerm_key_vault_secret" "customer1_db_user" {
-  name = "customer1_db-user"
+  name = "customer1-db-user"
   value = "app"
   key_vault_id = azurerm_key_vault.n8n_vault.id
   
@@ -150,7 +154,7 @@ resource "azurerm_key_vault_secret" "customer1_db_user" {
 }
 
 resource "azurerm_key_vault_secret" "customer1db_pass" {
-  name = "customer1db-pass"
+  name = "customer1-db-pass"
   value = random_password.customer1_db_password.result
   key_vault_id = azurerm_key_vault.n8n_vault.id
   
