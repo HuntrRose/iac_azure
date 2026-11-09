@@ -86,6 +86,14 @@ resource "azurerm_kubernetes_flux_configuration" "main" {
     sync_interval_in_seconds = 300
     garbage_collection_enabled = true
   }
+  
+  kustomizations {
+    name = "infra-operators" 
+    path = "./infrastructure/operators/staging"
+    sync_interval_in_seconds = 300
+    garbage_collection_enabled = true
+    depends_on = ["infra-controllers"]
+  }
 
   kustomizations {
     name = "infra-configs" 
@@ -100,7 +108,7 @@ resource "azurerm_kubernetes_flux_configuration" "main" {
     path = "./apps/staging"
     sync_interval_in_seconds = 300
     garbage_collection_enabled = true
-    depends_on = ["infra-configs"]
+    depends_on = ["infra-configs", "infra-operators"]
   }
 
   scope = "cluster"
