@@ -1,5 +1,5 @@
 #!/usr/bin/bash
 /usr/local/bin/mise trust /workspaces/"$DEVPOD_WORKSPACE_ID"/mise.toml
 mise install
-#sudo apt-get -ys update
-#sudo apt-get -ys install vim
+sudo apt-get -ys update
+sudo apt-get -ys install kitty

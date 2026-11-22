@@ -35,6 +35,7 @@ data "azurerm_storage_account_blob_container_sas" "customer1" {
     list   = true
     add    = true
     create = true
+    tags = false
   }
 }
 
@@ -56,6 +57,12 @@ resource "azurerm_key_vault_secret" "customer1_blob_sas" {
 
 output "storage_account_name" {
   value = azurerm_storage_account.cnpg_backups.name
+}
+
+output "storage-sas"  {
+   value = data.azurerm_storage_account_blob_container_sas.customer1.sas
+   description = "sas token"
+   sensitive = true
 }
 
 output "customer1_backup_path" {
