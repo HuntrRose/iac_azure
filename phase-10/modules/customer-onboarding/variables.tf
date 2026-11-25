@@ -11,15 +11,17 @@ variable "customer_name" {
   }
 }
 
-variable "" {
+variable "environment" {
   type = string
   description = "Target environment (staging, production)"
 
-  validation = contains(["staging", "production", "n8n"], var.environment)
-  error_message = "Environment must be staging, production or n8n"
+  validation {
+    condition = contains(["staging", "production", "n8n"], var.environment)
+    error_message = "Environment must be staging, production or n8n"
+  }
 }
 
-variable "key_vault_id" {
+variable "keyvault_id" {
   type = string
   description = "Azure Key Vault resource ID for secret managment"
 }
@@ -34,7 +36,7 @@ variable "storage_account_name" {
   description = "Storage account name for DB backups"
 }
 
-variable "storage_account_primary_conneciton_string" {
+variable "storage_account_primary_connection_string" {
   type = string
   sensitive = true
   description = "Storage account connectionstring for SAS generation"
@@ -69,6 +71,12 @@ variable "n8n_storage_size" {
   type = string
   description = "N8n PVc storage size"
   default = "1Gi"
+}
+
+variable "n8n_version" {
+  type        = string
+  description = "n8n container image version"
+  default     = "2.45.6"
 }
 
 ## Resource limits

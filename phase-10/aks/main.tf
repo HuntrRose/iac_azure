@@ -252,3 +252,10 @@ resource "azurerm_key_vault_secret" "grafana_admin_user" {
   depends_on = [azurerm_role_assignment.kv_admin]
 }
 
+resource "azurerm_key_vault_secret" "storage_account_name" {
+  name         = "storage-account-name"
+  value        = azurerm_storage_account.cnpg_backups.name
+  key_vault_id = azurerm_key_vault.n8n_vault.id
+
+  depends_on = [azurerm_role_assignment.kv_admin]
+}

@@ -19,14 +19,14 @@ module "customer" {
   customer_name = each.key
   environment = local.environment
 
-  key_vault_id = azurerm_key_vault.n8n_vault.id
+  keyvault_id = azurerm_key_vault.n8n_vault.id
   storage_account_id = azurerm_storage_account.cnpg_backups.id
   storage_account_name = azurerm_storage_account.cnpg_backups.name
-  storage_account_primary_connection_string = azurerm_storage_account.cnpg_backups.storage_account_primary_connection_string
+  storage_account_primary_connection_string = azurerm_storage_account.cnpg_backups.primary_connection_string
 
   keyvault_name = azurerm_key_vault.n8n_vault.name
-  key_vault_tenant_id = data.azurerm_client_config.current.tenant_id 
-  aks_keyvault_identity_client_id = azurerm_kubernetes_cluster.main.azurerm_key_vault_secret_provider[0].secret_identity[0].client_id
+  keyvault_tenant_id = data.azurerm_client_config.current.tenant_id
+  aks_keyvault_identity_client_id = azurerm_kubernetes_cluster.main.key_vault_secrets_provider[0].secret_identity[0].client_id
   
   gitops_repo_path = local.gitops_repo_path
   domain = local.domain

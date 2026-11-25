@@ -21,7 +21,7 @@ resource "local_file" "namespace" {
         pod-security.kubernetes.io/enforce: restricted
   YAML
 
-  depends_on = ["local_file.directory_marker"]
+  depends_on = [local_file.directory_marker]
 }
 
 # 2. SecretProviderClass for Azure Key Vault CSI
