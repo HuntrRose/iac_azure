@@ -349,7 +349,7 @@ resource "local_file" "ingress" {
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
     spec:
-      ingressClassName: traefik
+      ingressClassName: traefik-traefik
       tls:
         - hosts:
             - ${var.customer_name}.${var.domain}
