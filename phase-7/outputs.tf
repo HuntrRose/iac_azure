@@ -20,3 +20,10 @@ output "storage_account_name" {
   description = "Storage account for CNPG backups"
 }
 
+## Grafana Outputs
+
+output "grafana_admin_password" {
+  value       = random_password.grafana_admin.result
+  sensitive   = true
+  description = "Grafana admin password (stored in Key Vault as grafana-admin-password)"
+}

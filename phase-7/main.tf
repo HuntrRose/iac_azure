@@ -172,13 +172,13 @@ resource "azurerm_kubernetes_flux_configuration" "main" {
     garbage_collection_enabled = true
   }
 
-  # kustomizations {
-  #   name                       = "monitoring-configs"
-  #   path                       = "./monitoring/configs/staging"
-  #   sync_interval_in_seconds   = 300
-  #   depends_on                 = ["monitoring-controllers"]
-  #   garbage_collection_enabled = true
-  # }
+  kustomizations {
+    name                       = "monitoring-configs"
+    path                       = "./monitoring/configs/staging"
+    sync_interval_in_seconds   = 300
+    depends_on                 = ["monitoring-controllers"]
+    garbage_collection_enabled = true
+  }
 
   kustomizations {
     name                       = "apps"
@@ -249,3 +249,29 @@ resource "azurerm_key_vault_secret" "customer1_db_password" {
 
   depends_on = [azurerm_role_assignment.kv_admin]
 }
+
+resource "random_password" "grafana_admin" {
+  length  = 24
+  special = false
+
+  lifecycle {
+    ignore_changes = all
+  }
+}
+
+resource "azurerm_key_vault_secret" "grafana_admin_password" {
+  name         = "grafana-admin-password"
+  value        = random_password.grafana_admin.result
+  key_vault_id = azurerm_key_vault.n8n_vault.id
+
+  depends_on = [azurerm_role_assignment.kv_admin]
+}
+
+resource "azurerm_key_vault_secret" "grafana_admin_user" {
+  name         = "grafana-admin-user"
+  value        = "admin"
+  key_vault_id = azurerm_key_vault.n8n_vault.id
+
+  depends_on = [azurerm_role_assignment.kv_admin]
+}
+

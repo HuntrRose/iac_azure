@@ -1,0 +1,19 @@
+# Set variables
+KEY_VAULT_NAME="kv-n8n-staging-asrgh"
+BOT_TOKEN="9241560513:AAEAHtvz_e5ilfDIvj_3rF8zpfi3ajiIIjo"  # From BotFather
+CHAT_ID="9066728601"  # From getUpdates (use quotes for negative numbers)
+
+# Add Telegram bot token
+az keyvault secret set \
+  --vault-name "$KEY_VAULT_NAME" \
+  --name "grafana-telegram-bot-token" \
+  --value "$BOT_TOKEN"
+
+# Add Telegram chat ID
+az keyvault secret set \
+  --vault-name "$KEY_VAULT_NAME" \
+  --name "grafana-telegram-chat-id" \
+  --value "$CHAT_ID"
+
+# Verify secrets were created
+az keyvault secret list --vault-name "$KEY_VAULT_NAME" -o table
