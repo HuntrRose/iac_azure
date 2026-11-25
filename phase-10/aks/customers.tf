@@ -3,6 +3,7 @@ locals {
   customers = toset([
     "erik",
     "maria",
+    "ina",
   ])
 
   environment = "n8n"

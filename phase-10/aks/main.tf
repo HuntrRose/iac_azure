@@ -259,3 +259,27 @@ resource "azurerm_key_vault_secret" "storage_account_name" {
 
   depends_on = [azurerm_role_assignment.kv_admin]
 }
+
+resource "azurerm_key_vault_secret" "grafana_telegram_chat_id" {
+  name         = "grafana-telegram-chat-id"
+  value        = "000000000"
+  key_vault_id = azurerm_key_vault.n8n_vault.id
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+
+  depends_on = [azurerm_role_assignment.kv_admin]
+}
+
+resource "azurerm_key_vault_secret" "grafana_telegram_bot_token" {
+  name         = "grafana-telegram-bot-token"
+  value        = "DEMO:dummy-bot-token-replace-me"
+  key_vault_id = azurerm_key_vault.n8n_vault.id
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+
+  depends_on = [azurerm_role_assignment.kv_admin]
+}
